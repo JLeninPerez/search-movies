@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 
+const API_KEY = '315cdeb'
+
 export class SearcForm extends Component {
 
     state = { inputMovie : '' }
@@ -10,7 +12,14 @@ export class SearcForm extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault()
-        alert(this.state.inputMovie)
+        const {inputMovie} = this.state
+        fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&s=${inputMovie}`)
+            .then(res => res.json())
+            .then(result => {
+                const {Search = [], totalResults = "0"} = result
+                console.log({Search, totalResults})
+                this.props.onResult(Search)
+            })        
     }
 
     render () {
